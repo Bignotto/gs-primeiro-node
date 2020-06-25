@@ -2,7 +2,7 @@ import { Router, request, response } from 'express';
 import { uuid } from 'uuidv4';
 import { startOfHour, parseISO, isEqual } from 'date-fns';
 import Appointment from '../models/Appointments';
-import AppointmentRepository from '../repositories/AppoiintmentsRepository';
+import AppointmentRepository from '../repositories/AppointmentsRepository';
 
 const appointmentsRouter = Router();
 const appointmentRepository = new AppointmentRepository();
@@ -19,7 +19,10 @@ appointmentsRouter.post('/', (request, response) => {
     if (findAppointmentOnSameDate) {
         return response.status(400).json({ message: 'Unavailable hour 🤔' });
     }
-    const appointment = appointmentRepository.create(provider, parsedDate);
+    const appointment = appointmentRepository.create({
+        provider,
+        date: parsedDate,
+    });
     return response.json(appointment);
 });
 
