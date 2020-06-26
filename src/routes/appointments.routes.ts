@@ -1,14 +1,12 @@
-import { Router, request, response } from 'express';
-import { uuid } from 'uuidv4';
-import { startOfHour, parseISO, isEqual } from 'date-fns';
-import Appointment from '../models/Appointments';
+import { Router, Request, Response } from 'express';
+import { parseISO } from 'date-fns';
 import AppointmentRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
 
 const appointmentsRouter = Router();
 const appointmentRepository = new AppointmentRepository();
 
-appointmentsRouter.post('/', (request, response) => {
+appointmentsRouter.post('/', (request: Request, response: Response) => {
     try {
         const { provider, date } = request.body;
 
