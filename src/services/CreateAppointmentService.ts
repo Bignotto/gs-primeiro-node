@@ -5,7 +5,7 @@ import Appointment from '../models/Appointments';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 interface Request {
-    provider: string;
+    provider_id: string;
     date: Date;
 }
 
@@ -16,7 +16,7 @@ class CreateAppointmentService {
     //     this.appointmentsRepository = appointmentsRepository;
     // }
 
-    public async execute({ provider, date }: Request): Promise<Appointment> {
+    public async execute({ provider_id, date }: Request): Promise<Appointment> {
         const appointmentsRepository = getCustomRepository(
             AppointmentsRepository,
         );
@@ -31,7 +31,7 @@ class CreateAppointmentService {
             throw Error('Unavailable hour 🤔');
         }
         const appointment = appointmentsRepository.create({
-            provider,
+            provider_id,
             date: appointmentDate,
         });
 
