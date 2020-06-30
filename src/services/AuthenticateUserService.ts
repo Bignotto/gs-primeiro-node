@@ -22,7 +22,7 @@ class AuthemticateUserService {
 
         if(!user) throw new Error("Wrong email and password combination!");
 
-        const passwordMatched = compare(password,user.password)
+        const passwordMatched = await compare(password,user.password)
         if(!passwordMatched) throw new Error("Wrong email and password combination!");
 
         return {
