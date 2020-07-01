@@ -6,19 +6,21 @@ const sessionRoute = Router();
 
 sessionRoute.post('/', async (request: Request, response: Response) => {
     try {
-        const {email,password} = request.body;
+        const { email, password } = request.body;
 
         const authenticateUser = new AuthenticateUserService();
 
-        const {user} = await authenticateUser.execute({
+        const { user } = await authenticateUser.execute({
             email,
-            password
+            password,
         });
-        return response.json({user})
+
+        delete user.password;
+
+        return response.json({ user });
     } catch (err) {
         return response.status(400).json({ error: err.message });
     }
 });
 
 export default sessionRoute;
-

@@ -17,17 +17,18 @@ class AuthemticateUserService {
         const userRepository = getRepository(User);
 
         const user = await userRepository.findOne({
-            where: {email}
+            where: { email },
         });
 
-        if(!user) throw new Error("Wrong email and password combination!");
+        if (!user) throw new Error('Wrong email and password combination!');
 
-        const passwordMatched = await compare(password,user.password)
-        if(!passwordMatched) throw new Error("Wrong email and password combination!");
+        const passwordMatched = await compare(password, user.password);
+        if (!passwordMatched)
+            throw new Error('Wrong email and password combination!');
 
         return {
-            user: user
-        }
+            user: user,
+        };
     }
 }
 
