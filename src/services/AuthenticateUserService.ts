@@ -1,7 +1,9 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import User from '../models/Users';
+import authConfig from '../config/auth';
 
 interface Request {
     email: string;
@@ -10,6 +12,7 @@ interface Request {
 
 interface Response {
     user: User;
+    token: string;
 }
 
 class AuthemticateUserService {
@@ -17,17 +20,24 @@ class AuthemticateUserService {
         const userRepository = getRepository(User);
 
         const user = await userRepository.findOne({
-            where: {email}
+            where: { email },
         });
 
-        if(!user) throw new Error("Wrong email and password combination!");
+        if (!user) throw new Error('Wrong email and password combination!');
 
-        const passwordMatched = await compare(password,user.password)
-        if(!passwordMatched) throw new Error("Wrong email and password combination!");
+        const passwordMatched = await compare(password, user.password);
+        if (!passwordMatched)
+            throw new Error('Wrong email and password combination!');
+
+        const token = sign({}, authConfig.jwt.secret, {
+            subject: user.id,
+            expiresIn: authConfig.jwt.secret,
+        });
 
         return {
-            user: user
-        }
+            user: user,
+            token,
+        };
     }
 }
 
