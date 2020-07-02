@@ -9,22 +9,18 @@ const appointmentsRouter = Router();
 appointmentsRouter.use(ensureAuthenticade);
 
 appointmentsRouter.post('/', async (request: Request, response: Response) => {
-    try {
-        const { provider, date } = request.body;
+    const { provider, date } = request.body;
 
-        const parsedDate = parseISO(date);
+    const parsedDate = parseISO(date);
 
-        const createAppointment = new CreateAppointmentService();
+    const createAppointment = new CreateAppointmentService();
 
-        const appointment = await createAppointment.execute({
-            date: parsedDate,
-            provider_id: provider,
-        });
+    const appointment = await createAppointment.execute({
+        date: parsedDate,
+        provider_id: provider,
+    });
 
-        return response.json(appointment);
-    } catch (err) {
-        return response.status(400).json({ error: err.message });
-    }
+    return response.json(appointment);
 });
 
 appointmentsRouter.get('/', async (request, response) => {
