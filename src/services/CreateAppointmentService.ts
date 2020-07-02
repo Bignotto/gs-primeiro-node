@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 
 import Appointment from '../models/Appointments';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import AppError from '../errors/AppError';
 
 interface Request {
     provider_id: string;
@@ -28,7 +29,7 @@ class CreateAppointmentService {
         );
 
         if (findAppointmentOnSameDate) {
-            throw Error('Unavailable hour 🤔');
+            throw new AppError('Unavailable hour 🤔');
         }
         const appointment = appointmentsRepository.create({
             provider_id,
