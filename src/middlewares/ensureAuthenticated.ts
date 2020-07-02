@@ -22,7 +22,6 @@ export default function enusreAuthenticated(
     const [, token] = authHeader.split(' ');
     try {
         const decoded = verify(token, authConfig.jwt.secret);
-        console.log(decoded);
 
         const { sub } = decoded as TokenPayload;
         request.user = {
