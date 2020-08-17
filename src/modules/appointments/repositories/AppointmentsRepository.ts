@@ -1,4 +1,4 @@
-import Appointment from '../models/Appointments';
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointments';
 import { isEqual } from 'date-fns';
 import { EntityRepository, Repository } from 'typeorm';
 
