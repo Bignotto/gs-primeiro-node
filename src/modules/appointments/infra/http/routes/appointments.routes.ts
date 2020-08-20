@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getCustomRepository } from 'typeorm';
+import { container } from 'tsyringe';
 import { parseISO } from 'date-fns';
 
 import AppointmentRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
@@ -11,15 +11,10 @@ const appointmentsRouter = Router();
 appointmentsRouter.use(ensureAuthenticade);
 
 appointmentsRouter.post('/', async (request: Request, response: Response) => {
-    const appointmentRepository = new AppointmentRepository();
-
     const { provider, date } = request.body;
-
     const parsedDate = parseISO(date);
 
-    const createAppointment = new CreateAppointmentService(
-        appointmentRepository,
-    );
+    const createAppointment = container.resolve(CreateAppointmentService);
 
     const appointment = await createAppointment.execute({
         date: parsedDate,
