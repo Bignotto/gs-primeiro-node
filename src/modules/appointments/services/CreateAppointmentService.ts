@@ -1,37 +1,31 @@
 import { startOfHour } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
 
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointments';
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import AppError from '@shared/errors/AppError';
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
-interface Request {
+interface IRequest {
     provider_id: string;
     date: Date;
 }
 
 class CreateAppointmentService {
-    // private appointmentsRepository: AppointmentsRepository;
+    constructor(private appointmentsRepository: IAppointmentsRepository) {}
 
-    // constructor(appointmentsRepository: AppointmentsRepository) {
-    //     this.appointmentsRepository = appointmentsRepository;
-    // }
-
-    public async execute({ provider_id, date }: Request): Promise<Appointment> {
-        const appointmentsRepository = getCustomRepository(
-            AppointmentsRepository,
-        );
-
+    public async execute({
+        provider_id,
+        date,
+    }: IRequest): Promise<Appointment> {
         const appointmentDate = startOfHour(date);
 
-        const findAppointmentOnSameDate = await appointmentsRepository.findByDate(
+        const findAppointmentOnSameDate = await this.appointmentsRepository.findByDate(
             appointmentDate,
         );
 
         if (findAppointmentOnSameDate) {
             throw new AppError('Unavailable hour 🤔');
         }
-        const appointment = appointmentsRepository.create({
+        const appointment = this.appointmentsRepository.create({
             provider_id,
             date: appointmentDate,
         });
