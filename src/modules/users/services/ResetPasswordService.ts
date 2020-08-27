@@ -7,6 +7,8 @@ import IUserTokenRepository from '../repositories/IUserTokenRepository';
 import User from '@modules/users/infra/typeorm/entities/Users';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
+import { isAfter, addHours } from 'date-fns';
+
 interface IRequest {
     token: string;
     password: string;
@@ -29,6 +31,12 @@ class ResetPasswordService {
 
         if (!userToken) {
             throw new AppError('Token does not exist');
+        }
+
+        const tokenDate = userToken.created_at;
+        const compare = addHours(tokenDate, 2);
+        if (isAfter(Date.now(), compare)) {
+            throw new AppError('Invalid token');
         }
 
         const user = await this.usersRepository.findById(userToken.user_id);
