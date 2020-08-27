@@ -2,7 +2,7 @@ import User from '@modules/users/infra/typeorm/entities/Users';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import { uuid } from 'uuidv4';
-import IUserTokenRepository from '../IUserTokenRepository';
+import IUserTokenRepository from '../IUserTokensRepository';
 import UserToken from '@modules/users/infra/typeorm/entities/UserToken';
 
 class FakeUserTokenRepository implements IUserTokenRepository {
