@@ -5,6 +5,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokenRepository from '../repositories/IUserTokenRepository';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface IRequest {
     token: string;
@@ -18,6 +19,9 @@ class ResetPasswordService {
 
         @inject('UserTokenRepository')
         private userTokenRepository: IUserTokenRepository,
+
+        @inject('HashProvider')
+        private hashProvider: IHashProvider,
     ) {}
 
     public async execute({ token, password }: IRequest): Promise<void> {
@@ -33,7 +37,7 @@ class ResetPasswordService {
             throw new AppError('User does not exit');
         }
 
-        user.password = password;
+        user.password = await this.hashProvider.generateHash(password);
 
         await this.usersRepository.save(user);
     }
