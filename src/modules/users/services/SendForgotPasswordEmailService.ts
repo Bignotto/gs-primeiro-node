@@ -12,14 +12,14 @@ interface IRequest {
 }
 
 @injectable()
-class SendForgotPasswrodEmailService {
+class SendForgotPasswordEmailService {
     constructor(
         @inject('UsersRepository') private usersRepository: IUsersRepository,
 
         @inject('MailProvider')
         private mailProvider: IMailProvider,
 
-        @inject('UserTokenRepository')
+        @inject('UserTokensRepository')
         private userTokenRepository: IUserTokenRepository,
     ) {}
 
@@ -28,10 +28,13 @@ class SendForgotPasswrodEmailService {
 
         if (!user) throw new AppError('User does not exists.');
 
-        await this.userTokenRepository.generate(user.id);
+        const { token } = await this.userTokenRepository.generate(user.id);
 
-        this.mailProvider.sendMail(email, 'Password reset!');
+        await this.mailProvider.sendMail(
+            email,
+            `Password reset token: ${token}`,
+        );
     }
 }
 
-export default SendForgotPasswrodEmailService;
+export default SendForgotPasswordEmailService;
