@@ -19,6 +19,16 @@
 
 # Atualização do Perfil
 
+**RF**
+
+-   O usuário deve poder atualizar seu nome, email e senha;
+
+**RN**
+
+-   O usuário não pode alterar seu email para um endereço já cadastrado;
+-   Para atualizar sua senha o usuário deve informar a senha antiga;
+-   Para atualizar sua senha o usuário precisa confirmar a nova senha;
+
 # Painel do Barbeiro (Prestador)
 
 # Agendamento de Serviços
