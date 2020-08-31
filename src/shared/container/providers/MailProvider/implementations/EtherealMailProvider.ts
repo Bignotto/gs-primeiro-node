@@ -1,11 +1,17 @@
 import IMailProvider from '../models/IMailProvider';
 import nodemailer, { Transporter } from 'nodemailer';
 import ISendMailDTO from '../dtos/ISendMailDTO';
+import IMailTemplateProvider from '../../MailTemplateProvider/models/IMailTemplateProvider';
+import { injectable, inject } from 'tsyringe';
 
+@injectable()
 export default class EtherealMailProvider implements IMailProvider {
     private client: Transporter;
 
-    constructor() {
+    constructor(
+        @inject('MailTemplateProvider')
+        private mailTemplateProvider: IMailTemplateProvider,
+    ) {
         const account = nodemailer.createTestAccount().then(account => {
             const transporter = nodemailer.createTransport({
                 host: account.smtp.host,
@@ -32,8 +38,8 @@ export default class EtherealMailProvider implements IMailProvider {
                 address: from?.email || 'gobarber@gobarber.com',
             },
             to: { name: to.name, address: to.email },
-            subject: 'Recupere sua senha',
-            html: `<p>TEMPLATE</p>`,
+            subject,
+            html: await this.mailTemplateProvider.parse(templateData),
         });
         console.log('Message sent: %s', message.messageId);
         // Preview only available when sending through an Ethereal account
