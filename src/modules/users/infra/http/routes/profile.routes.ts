@@ -10,5 +10,6 @@ const profileController = new ProfileController();
 profileRouter.use(ensureAuthenticaded);
 
 profileRouter.post('/', profileController.update);
+profileRouter.get('/', profileController.show);
 
 export default profileRouter;
