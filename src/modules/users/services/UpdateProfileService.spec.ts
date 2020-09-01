@@ -106,4 +106,21 @@ describe('UpdateUserProfile', () => {
             }),
         ).rejects.toBeInstanceOf(AppError);
     });
+
+    it('should not be able to update password without provide actual password', async () => {
+        const user = await fakeUsersRepository.create({
+            name: 'John Doe',
+            email: 'john@doe.com',
+            password: '123456',
+        });
+
+        await expect(
+            updateProfileService.execute({
+                user_id: user.id,
+                name: 'Homer Simpson',
+                email: 'homer@gmail.com',
+                password: '123123',
+            }),
+        ).rejects.toBeInstanceOf(AppError);
+    });
 });
