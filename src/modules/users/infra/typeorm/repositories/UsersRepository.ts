@@ -2,6 +2,7 @@ import { getRepository, Repository, Not } from 'typeorm';
 
 import User from '../entities/Users';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IFindAllProvidersDTO from '@modules/users/dtos/IFindAllProvidersDTO';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 class UsersRepository implements IUsersRepository {
@@ -33,13 +34,15 @@ class UsersRepository implements IUsersRepository {
         return this.ormRepository.save(user);
     }
 
-    public async findAllProviders(except: string): Promise<User[]> {
+    public async findAllProviders({
+        except_user_id,
+    }: IFindAllProvidersDTO): Promise<User[]> {
         let users: User[];
 
-        if (except) {
+        if (except_user_id) {
             users = await this.ormRepository.find({
                 where: {
-                    id: Not(except),
+                    id: Not(except_user_id),
                 },
             });
         } else {
