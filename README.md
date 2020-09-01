@@ -32,3 +32,22 @@
 # Painel do Barbeiro (Prestador)
 
 # Agendamento de Serviços
+
+**RF**
+
+-   O usuário deve poder listar dosos os prestadores de serviço cadastrados;
+-   O usuário deve poder listar os dias de um mês com pelo menos um horário disponível;
+-   O usuário deve poder listar horários disponíveis em um dia específico de um prestador específico;
+-   O usuário deve poder fazer um novo agendamento com um prestador;
+
+**RNF**
+
+-   A listagem de prestadores deve ser armazenada em cache;
+
+**RN**
+
+-   Cada agendamento deve durar 1 hora;
+-   Agendamentos disponíveis sempre entre 8h00 e 18h00 (primeiro às 8 e último às 17);
+-   Usuário não pode agendar um horário ocupado;
+-   Usuário não pode agendar um horário no passado;
+-   Usuário não pode agendar serviços consigo mesmo;

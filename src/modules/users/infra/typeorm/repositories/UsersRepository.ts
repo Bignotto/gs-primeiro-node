@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Not } from 'typeorm';
 
 import User from '../entities/Users';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
@@ -31,6 +31,22 @@ class UsersRepository implements IUsersRepository {
 
     public async save(user: User): Promise<User> {
         return this.ormRepository.save(user);
+    }
+
+    public async findAllProviders(except: string): Promise<User[]> {
+        let users: User[];
+
+        if (except) {
+            users = await this.ormRepository.find({
+                where: {
+                    id: Not(except),
+                },
+            });
+        } else {
+            users = await this.ormRepository.find();
+        }
+
+        return users;
     }
 }
 
