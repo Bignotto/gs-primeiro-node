@@ -1,9 +1,10 @@
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointments';
 import { isEqual } from 'date-fns';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, Repository, Raw } from 'typeorm';
 
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
+import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
 
 class AppointmentRepository implements IAppointmentsRepository {
     private ormRepository: Repository<Appointment>;
@@ -27,6 +28,26 @@ class AppointmentRepository implements IAppointmentsRepository {
         const appointment = this.ormRepository.create({ provider_id, date });
         await this.ormRepository.save(appointment);
         return appointment;
+    }
+
+    public async findAllInMonthFromProvider({
+        provider_id,
+        month,
+        year,
+    }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
+        const parsedMonth = String(month).padStart(2, '0');
+
+        const appointments = await this.ormRepository.find({
+            where: {
+                provider_id,
+                date: Raw(
+                    dateFieldName =>
+                        `to_char(${dateFieldName},'MM-YYYY')='${parsedMonth}-${year}'`,
+                ),
+            },
+        });
+
+        return appointments;
     }
 }
 

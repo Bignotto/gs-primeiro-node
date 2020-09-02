@@ -11,8 +11,10 @@ describe('ListMonthAvailabilityService', () => {
     let fakeAppointmentRepository: FakeAppointmentsRepository;
 
     beforeEach(() => {
-        listProvidersMonthAvailabilityService = new ListProvidersMonthAvailabilityService();
         fakeAppointmentRepository = new FakeAppointmentsRepository();
+        listProvidersMonthAvailabilityService = new ListProvidersMonthAvailabilityService(
+            fakeAppointmentRepository,
+        );
     });
 
     it('should be able to list all providers', async () => {
@@ -31,9 +33,9 @@ describe('ListMonthAvailabilityService', () => {
 
         const availability = await listProvidersMonthAvailabilityService.execute(
             {
-                user_id: 'provider 1',
+                provider_id: 'provider 1',
                 year: 2020,
-                month: 8,
+                month: 10,
             },
         );
 
