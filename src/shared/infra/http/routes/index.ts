@@ -14,6 +14,6 @@ routes.use('/users', usersRouter);
 routes.use('/session', sessionRouter);
 routes.use('/password', passwordRouter);
 routes.use('/profile', profileRouter);
-routes.use('/providers', profileRouter);
+routes.use('/providers', providersRouter);
 
 export default routes;
