@@ -1,6 +1,4 @@
-import Appointment from '@modules/appointments/infra/typeorm/entities/Appointments';
-import { isEqual } from 'date-fns';
-import { getMongoRepository, MongoRepository, Raw } from 'typeorm';
+import { getMongoRepository, MongoRepository } from 'typeorm';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import ICreateNotificationDTO from '@modules/notifications/dtos/ICreateNotificationDTO';
@@ -14,14 +12,6 @@ class NotificationsRepository implements INotificationsRepository {
         this.ormRepository = getMongoRepository(Notification, 'mongo');
     }
 
-    public async findByDate(date: Date): Promise<Notification | undefined> {
-        const findNotification = await this.ormRepository.findOne({
-            where: { date },
-        });
-
-        return findNotification;
-    }
-
     public async create({
         recipient_id,
         content,
@@ -30,6 +20,7 @@ class NotificationsRepository implements INotificationsRepository {
             content,
             recipient_id,
         });
+        await this.ormRepository.save(notification);
         return notification;
     }
 }
