@@ -44,4 +44,5 @@ app.get('/', (request, response) => {
 
 app.listen(3333, () => {
     console.log('🚀 Lift off!!!!!!!!!!!!!!!!');
+    console.log(`environment -> ${process.env.BASE_URL}`);
 });
