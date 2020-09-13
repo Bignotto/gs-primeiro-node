@@ -5,6 +5,9 @@ import uploadConfig from '@config/upload';
 import IStorageProvider from '../models/IStorageProvider';
 
 import aws, { S3 } from 'aws-sdk';
+import mime from 'mime';
+
+import upload from '@config/upload';
 
 class DiskStorageProvider implements IStorageProvider {
     private client: S3;
@@ -17,31 +20,33 @@ class DiskStorageProvider implements IStorageProvider {
 
     public async saveFile(file: string): Promise<string> {
         const originalFilePath = path.resolve(uploadConfig.tmpFolder, file);
-        const fileContent = fs.promises.readFile(originalFilePath, {
-            encoding: 'utf-8',
-        });
+        const ContentType = mime.getType(originalFilePath);
+        const fileContent = await fs.promises.readFile(originalFilePath);
+
+        if (!ContentType)
+            throw new Error('Invalid Content Type: AmazonS3Provider:27');
 
         await this.client
             .putObject({
-                Bucket: 'big-gobarber',
+                Bucket: uploadConfig.config.aws.bucket,
                 Key: file,
                 ACL: 'public-read',
                 Body: fileContent,
+                ContentType,
             })
             .promise();
+
+        await fs.promises.unlink(originalFilePath);
 
         return file;
     }
     public async deleteFile(file: string): Promise<void> {
-        const filePath = path.resolve(uploadConfig.uploadsFolder, file);
-
-        try {
-            await fs.promises.stat(filePath);
-        } catch {
-            return;
-        }
-
-        await fs.promises.unlink(filePath);
+        await this.client
+            .deleteObject({
+                Bucket: uploadConfig.config.aws.bucket,
+                Key: file,
+            })
+            .promise();
     }
 }
 
