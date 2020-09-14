@@ -12,7 +12,7 @@ export default class ProvidersController {
         const user_id = request.user.id;
 
         const listProvidersService = container.resolve(ListProvidersService);
-        const providers = listProvidersService.execute({
+        const providers = await listProvidersService.execute({
             user_id,
         });
 
