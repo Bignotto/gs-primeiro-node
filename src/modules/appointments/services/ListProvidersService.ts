@@ -31,7 +31,7 @@ class ListProvidersService {
             console.log('loading from database');
         }
 
-        //await this.cacheProvider.save(`providers-list:${user_id}`, users);
+        await this.cacheProvider.save(`providers-list:${user_id}`, users);
 
         return users;
     }
