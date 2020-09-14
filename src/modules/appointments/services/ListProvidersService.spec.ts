@@ -7,16 +7,22 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider'; //'../providers/HashProvider/fakes/FakeHashProvider';
 
 import AppError from '@shared/errors/AppError';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 
 describe('ListProviders', () => {
     let fakeUsersRepository: FakeUsersRepository;
     let fakeHashProvider: FakeHashProvider;
     let listProvidersService: ListProvidersService;
+    let fakeCacheProvider: FakeCacheProvider;
 
     beforeEach(() => {
         fakeUsersRepository = new FakeUsersRepository();
         fakeHashProvider = new FakeHashProvider();
-        listProvidersService = new ListProvidersService(fakeUsersRepository);
+        fakeCacheProvider = new FakeCacheProvider();
+        listProvidersService = new ListProvidersService(
+            fakeUsersRepository,
+            fakeCacheProvider,
+        );
     });
 
     it('should be able to list all providers', async () => {
