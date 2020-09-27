@@ -22,7 +22,7 @@ appointmentsRouter.post(
     }),
     appointmentsController.create,
 );
-appointmentsRouter.post('/me', propviderAppointmentsController.index);
+appointmentsRouter.get('/me', propviderAppointmentsController.index);
 
 // appointmentsRouter.get('/', async (request, response) => {
 //     const appointments = await appointmentRepository.find();
